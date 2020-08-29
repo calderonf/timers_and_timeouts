@@ -28,7 +28,7 @@ void Tm_Procese_tiempo (Tm_Periodico *ctp)
 		}
 	}
 	if ((ctp->timeout))//si ya es cero, no entra
-	ctp->timeout=ctp->timeout-1;//decremente tambi�n el timeout
+		ctp->timeout=ctp->timeout-1;//decremente tambi�n el timeout
 }
 char Tm_Hubo_periodico (Tm_Periodico *ctp) //le ingreso la estructura
 {
