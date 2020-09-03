@@ -7,8 +7,16 @@ extern "C" {
 //#include <stddef.h>
 typedef struct D_Display D_Display;
 
-#define UNIDADES // si e estado esta en este muestro unidades
-#define DECENAS  // si el estado esta en este muestro decenas
+#define UNIDADES 1// si e estado esta en este muestro unidades
+#define DECENAS  2// si el estado esta en este muestro decenas
+
+/*el transistor que habilita el display de unidades esta en el puerto B bit 2*/
+#define PUERTODISPUNIDADES PORTB
+#define TRANDISPUNIDADES 0b00000100
+
+/*el transistor que habilita el display de unidades esta en el puerto C bit 5*/
+#define PUERTOBDISPDECENAS PORTC
+#define TRANDISPDECENAS 0b00100000
 
 struct D_Display
 {
@@ -17,21 +25,22 @@ struct D_Display
     int8_t mostrando;
 };
 
-//funciones para  procesar tiempo
-void Tm_Procese_tiempo (Tm_Periodico *ctp);
+//funciones para  procesar display
+void D_Procese_display (D_Display *disp);
 
 
-//funciones de tiempos periodicos para timers
-void Tm_Inicie_periodico (Tm_Periodico *ctp,unsigned int periodo);
-char Tm_Hubo_periodico (Tm_Periodico *ctp);
-void Tm_Baje_periodico (Tm_Periodico *ctp);
-void Tm_Termine_periodico (Tm_Periodico *ctp);
+//funciones de  display
+void D_inicie_display (D_Display *disp,int8_t *tempUnidades,int8_t *tempDecenas);
+void D_apague_display (D_Display *disp);
 
-//funciones de timeout
-void Tm_Inicie_timeout (Tm_Periodico *ctp,unsigned int tiempo);
-char Tm_Hubo_timeout (Tm_Periodico *ctp);
-void Tm_Baje_timeout (Tm_Periodico *ctp);
+//lector de tabla de lookup entra numero sale en BCD
+int8_t num2BCD(int8_t num);
+
+
+
 #ifdef __cplusplus
 } // extern "C"
 #endif
 #endif
+
+

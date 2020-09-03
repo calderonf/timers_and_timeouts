@@ -14,9 +14,7 @@ void main (void)
     int8_t temperatura;//ya va a estar en celsius
 
     int8_t tempUnidades;//vamos a guardar el BCD de unidades
-    int8_t tempDecenas;//vamos a guardar el BCD de decenas
-
-    
+    int8_t tempDecenas;//vamos a guardar el BCD de decenas    
     Tm_Inicie_periodico (&sondeoADC,TIEMPOADC);// iniciar periodico de ADC
     Tm_Inicie_periodico (&sondeoDisplay,TIEMPODISPLAY);// iniciar periodico de Display
 
@@ -28,18 +26,24 @@ void main (void)
             /*Atencion 1*/
             //reseteamos el timer
             Tm_Procese_tiempo (&sondeoADC);
-            Tm_Procese_tiempo (sondeoDisplay);
+            Tm_Procese_tiempo (&sondeoDisplay);
         }
-        if(Tm_Hubo_periodico (&tyt))// condicion de 100 ms
+        if(Tm_Hubo_periodico (&sondeoADC))// condicion de ADC
         {
-            Tm_Baje_periodico (&tyt);//reset de condicion
-            /*atencion de lo que requiere que se haga cada 100 ms*/
-            //...
+            Tm_Baje_periodico (&sondeoADC);//reset de condicion ADC
+            /*en este lugar leemos el ADC y convertimos el valor leido a 
+             grados y a unidades y decenas para el display
+            */
+            DyC_Procese_ADC(&temperatura,&tempUnidades,&tempDecenas);
+        }
+        if(Tm_Hubo_periodico (&sondeoDisplay))// condicion de Display entra cada 
+        //TIEMPODISPLAY 10 milisegundos
+        {
+            Tm_Baje_periodico (&sondeoDisplay);//reset de condicion
+            DyC_Procese_Display(&tempUnidades,&tempDecenas);
         }
         //if (/*apague el timer tyt*/)
         //    Tm_Termine_periodico (&tyt);
     }
 // Nunca deberia llegar aquí
 }
-
-
